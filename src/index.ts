@@ -187,7 +187,7 @@ client.once(Events.ClientReady, async (readyClient) => {
   console.log('Bot is ready and tracking voice channels');
 
   // Register commands
-  await registerCommands(client);
+  await registerCommands();
 });
 
 // Handle button interactions for channel redirects
@@ -300,6 +300,9 @@ client.on(Events.MessageCreate, async (message: Message) => {
 
   if (hasRestrictedFile) {
     try {
+      // Ensure it's a guild text channel
+      if (!message.channel.isTextBased() || message.channel.isDMBased()) return;
+
       // Check if bot has permission to manage messages
       const botMember = message.guild.members.me;
       if (!botMember) {
@@ -308,13 +311,15 @@ client.on(Events.MessageCreate, async (message: Message) => {
       }
 
       const permissions = message.channel.permissionsFor(botMember);
-      console.log(`[File Check] User: ${message.author.tag}, Channel: ${message.channel.name}`);
+      const channelName = 'name' in message.channel ? message.channel.name : 'unknown';
+      console.log(`[File Check] User: ${message.author.tag}, Channel: ${channelName}`);
       console.log(`[Permissions] ManageMessages: ${permissions?.has('ManageMessages')}, Administrator: ${permissions?.has('Administrator')}`);
 
       const canManageMessages = permissions?.has('ManageMessages') || permissions?.has('Administrator');
 
       if (!canManageMessages) {
-        console.error(`Missing ManageMessages permission in ${message.guild.name} - ${message.channel.name}`);
+        const channelName = 'name' in message.channel ? message.channel.name : 'unknown';
+        console.error(`Missing ManageMessages permission in ${message.guild.name} - ${channelName}`);
 
         // Try to send a warning even if we can't delete
         if (message.channel.isSendable()) {
@@ -331,6 +336,7 @@ client.on(Events.MessageCreate, async (message: Message) => {
 
       // Delete the message with the restricted file
       await message.delete();
+      const channelName2 = 'name' in message.channel ? message.channel.name : 'unknown';
       console.log(`Successfully deleted restricted file from ${message.author.tag} in ${message.guild.name}`);
 
       // Send a warning message (check if channel supports sending messages)
@@ -418,8 +424,16 @@ async function main(): Promise<void> {
     // Fix any existing discounts with incorrect end times
     await fixDiscountDates();
 
-    httpServer.listen(PORT, '0.0.0.0', () => {
-      console.log(`Dashboard running on port ${PORT}`);
+    // Initialize services
+    voiceTracker = new VoiceTracker(client);
+    reminderService = new ReminderService(client);
+    schedulerService = new SchedulerService(client);
+    audioMonitor = new AudioMonitor(client);
+    youtubeMonitor = new YouTubeMonitor(client);
+
+    const port = parseInt(PORT as string, 10);
+    httpServer.listen(port, '0.0.0.0', () => {
+      console.log(`Dashboard running on port ${port}`);
     });
 
     await registerCommands();

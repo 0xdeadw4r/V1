@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { Client } from 'discord.js';
+import { Client, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { Server as SocketServer } from 'socket.io';
 import { validateCredentials, isAuthenticated } from './auth';
 import { Staff, FileWhitelist, GuildConfig, Session, Adjustment } from '../models';
@@ -41,7 +41,7 @@ export async function refreshAllEmbeds(client: Client, guildId: string): Promise
             endDate: { $gte: now }
           });
         }
-        
+
         // If no embed-specific discount, check for global active discount
         if (!activeDiscount) {
           activeDiscount = await Discount.findOne({
@@ -53,7 +53,6 @@ export async function refreshAllEmbeds(client: Client, guildId: string): Promise
         }
 
         // Build the embed
-        const { EmbedBuilder } = await import('discord.js');
         const embed = new EmbedBuilder()
           .setTitle(embedConfig.title)
           .setDescription(embedConfig.description)
@@ -844,7 +843,7 @@ export function createDashboardRoutes(
           endDate: { $gte: now }
         });
       }
-      
+
       // If no embed-specific discount, check for global active discount
       if (!activeDiscount) {
         activeDiscount = await Discount.findOne({
@@ -855,7 +854,6 @@ export function createDashboardRoutes(
         });
       }
 
-      const { EmbedBuilder } = await import('discord.js');
       const embed = new EmbedBuilder()
         .setTitle(embedConfig.title)
         .setColor(embedConfig.color as any);
@@ -910,9 +908,8 @@ export function createDashboardRoutes(
       // Create buttons if configured
       const components = [];
       if (embedConfig.buttons && embedConfig.buttons.length > 0) {
-        const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = await import('discord.js');
         const row = new ActionRowBuilder<ButtonBuilder>();
-        
+
         for (const btn of embedConfig.buttons) {
           const buttonStyle = ButtonStyle[btn.style as keyof typeof ButtonStyle] || ButtonStyle.Primary;
           const button = new ButtonBuilder()
@@ -928,10 +925,10 @@ export function createDashboardRoutes(
       if (components.length > 0) messagePayload.components = components;
 
       const message = await channel.send(messagePayload);
-      
+
       // Store the message ID for future updates
       await CustomEmbed.findByIdAndUpdate(id, { messageId: message.id });
-      
+
       res.json({ success: true });
     } catch (error) {
       console.error('Embed send error:', error);
@@ -944,20 +941,20 @@ export function createDashboardRoutes(
       const { id } = req.params;
       const { discountId } = req.body;
       const { CustomEmbed } = await import('../models');
-      
+
       const embed = await CustomEmbed.findByIdAndUpdate(
         id,
         { discountId: discountId || null },
         { new: true }
       );
-      
+
       if (!embed) {
         return res.status(404).json({ error: 'Embed not found' });
       }
 
       // Refresh this embed
       await refreshAllEmbeds(client, embed.guildId);
-      
+
       res.json(embed);
     } catch (error) {
       console.error('Embed discount update error:', error);
@@ -996,7 +993,7 @@ export function createDashboardRoutes(
   router.post('/api/youtube-configs', isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { guildId, youtubeChannelId, channelId } = req.body;
-      
+
       const { YouTubeConfig } = await import('../models');
       const config = await YouTubeConfig.create({
         guildId,
