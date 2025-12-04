@@ -1,0 +1,24 @@
+src/dashboard/routes.ts(914,42): error TS2749: 'ButtonBuilder' refers to a value, but is being used as a type here. Did you mean 'typeof ButtonBuilder'?
+src/index.ts(190,26): error TS2554: Expected 0 arguments, but got 1.
+src/index.ts(310,43): error TS2339: Property 'permissionsFor' does not exist on type 'DMChannel | PartialDMChannel | PartialGroupDMChannel | NewsChannel | StageChannel | TextChannel | PublicThreadChannel<...> | PrivateThreadChannel | VoiceChannel'.
+  Property 'permissionsFor' does not exist on type 'DMChannel'.
+src/index.ts(311,89): error TS2339: Property 'name' does not exist on type 'DMChannel | PartialDMChannel | PartialGroupDMChannel | NewsChannel | StageChannel | TextChannel | PublicThreadChannel<...> | PrivateThreadChannel | VoiceChannel'.
+  Property 'name' does not exist on type 'DMChannel'.
+src/index.ts(317,103): error TS2339: Property 'name' does not exist on type 'DMChannel | PartialDMChannel | PartialGroupDMChannel | NewsChannel | StageChannel | TextChannel | PublicThreadChannel<...> | PrivateThreadChannel | VoiceChannel'.
+  Property 'name' does not exist on type 'DMChannel'.
+src/index.ts(359,34): error TS2339: Property 'name' does not exist on type 'DMChannel | PartialDMChannel | PartialGroupDMChannel | NewsChannel | StageChannel | TextChannel | PublicThreadChannel<...> | PrivateThreadChannel | VoiceChannel'.
+  Property 'name' does not exist on type 'DMChannel'.
+src/index.ts(421,29): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
+src/index.ts(441,3): error TS2454: Variable 'reminderService' is used before being assigned.
+src/index.ts(442,3): error TS2454: Variable 'youtubeMonitor' is used before being assigned.
+src/index.ts(449,3): error TS2454: Variable 'reminderService' is used before being assigned.
+src/index.ts(450,3): error TS2454: Variable 'youtubeMonitor' is used before being assigned.
+src/services/SchedulerService.ts(85,20): error TS2339: Property 'discountEnabled' does not exist on type 'Document<unknown, {}, IGuildConfig, {}, DefaultSchemaOptions> & IGuildConfig & Required<{ _id: ObjectId; }> & { ...; }'.
+src/services/SchedulerService.ts(104,19): error TS2339: Property 'discountDayOfWeek' does not exist on type 'Document<unknown, {}, IGuildConfig, {}, DefaultSchemaOptions> & IGuildConfig & Required<{ _id: ObjectId; }> & { ...; }'.
+src/services/SchedulerService.ts(105,19): error TS2339: Property 'discountHour' does not exist on type 'Document<unknown, {}, IGuildConfig, {}, DefaultSchemaOptions> & IGuildConfig & Required<{ _id: ObjectId; }> & { ...; }'.
+src/services/SchedulerService.ts(106,19): error TS2339: Property 'discountMinute' does not exist on type 'Document<unknown, {}, IGuildConfig, {}, DefaultSchemaOptions> & IGuildConfig & Required<{ _id: ObjectId; }> & { ...; }'.
+src/services/SchedulerService.ts(109,53): error TS2339: Property 'discountRate' does not exist on type 'Document<unknown, {}, IGuildConfig, {}, DefaultSchemaOptions> & IGuildConfig & Required<{ _id: ObjectId; }> & { ...; }'.
+src/services/SchedulerService.ts(112,19): error TS2339: Property 'discountEndTime' does not exist on type 'Document<unknown, {}, IGuildConfig, {}, DefaultSchemaOptions> & IGuildConfig & Required<{ _id: ObjectId; }> & { ...; }'.
+src/services/SchedulerService.ts(113,44): error TS2339: Property 'discountEndTime' does not exist on type 'Document<unknown, {}, IGuildConfig, {}, DefaultSchemaOptions> & IGuildConfig & Required<{ _id: ObjectId; }> & { ...; }'.
