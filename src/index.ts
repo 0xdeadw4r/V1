@@ -41,7 +41,7 @@ import { calculateSessionDuration } from './utils/time';
 const app = express();
 const httpServer = createServer(app);
 const io = new SocketServer(httpServer);
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || '5000';
 
 let botStartTime: Date | null = null;
 
@@ -84,6 +84,16 @@ let youtubeMonitor: YouTubeMonitor;
 app.get('/', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.send(dashboardHTML);
+});
+
+// Health check endpoint for uptime monitoring
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    uptime: botStartTime ? Math.floor((Date.now() - botStartTime.getTime()) / 1000) : 0,
+    bot: client.isReady() ? 'online' : 'offline',
+    timestamp: new Date().toISOString()
+  });
 });
 
 app.use(createDashboardRoutes(client, () => botStartTime, io));
@@ -431,9 +441,10 @@ async function main(): Promise<void> {
     audioMonitor = new AudioMonitor(client);
     youtubeMonitor = new YouTubeMonitor(client);
 
-    const port = parseInt(PORT as string, 10);
+    const port = parseInt(PORT, 10);
     httpServer.listen(port, '0.0.0.0', () => {
       console.log(`Dashboard running on port ${port}`);
+      console.log(`Health check available at: http://0.0.0.0:${port}/health`);
     });
 
     await registerCommands();
